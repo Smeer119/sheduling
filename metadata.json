@@ -1,0 +1,5 @@
+{
+  "name": "Workhand Construction Dashboard",
+  "description": "A high-utility construction management tool for visualizing project timelines with a 4-tier task hierarchy and interactive Gantt chart.",
+  "requestFramePermissions": []
+}
