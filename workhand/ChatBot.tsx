@@ -9,6 +9,7 @@ interface ChatBotProps {
   onAddTask: (task: Task) => void;
   onUpdateTask: (task: Task) => void;
   onDeleteTask: (id: string) => void;
+  showButton?: boolean;
 }
 
 interface Message {
@@ -16,7 +17,7 @@ interface Message {
   text: string;
 }
 
-const ChatBot: React.FC<ChatBotProps> = ({ tasks, onAddTask, onUpdateTask, onDeleteTask }) => {
+const ChatBot: React.FC<ChatBotProps> = ({ tasks, onAddTask, onUpdateTask, onDeleteTask, showButton = true }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     { role: 'model', text: 'Hello! I am your Workhand Assistant. I can help you manage your construction schedule. Try asking "What tasks are delayed?" or "Add a new workphase for Plumbing".' }
@@ -154,7 +155,7 @@ const ChatBot: React.FC<ChatBotProps> = ({ tasks, onAddTask, onUpdateTask, onDel
       - Subwork: Granular task.`;
 
       const response = await ai.models.generateContent({
-        model: 'gemini-3-pro-preview',
+        model: "gemini-1.5-flash",
         contents: [
           ...messages.map(m => ({ role: m.role === 'user' ? 'user' : 'model', parts: [{ text: m.text }] })),
           { role: 'user', parts: [{ text: userMsg }] }
@@ -197,16 +198,18 @@ const ChatBot: React.FC<ChatBotProps> = ({ tasks, onAddTask, onUpdateTask, onDel
   return (
     <>
       {/* Floating Button */}
-      <button 
-        onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-8 right-8 w-16 h-16 bg-blue-600 text-white rounded-2xl shadow-2xl flex items-center justify-center hover:bg-blue-700 transition-all hover:scale-105 active:scale-95 z-[200] group"
-      >
-        {isOpen ? (
-          <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
-        ) : (
-          <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
-        )}
-      </button>
+      {showButton && (
+        <button 
+          onClick={() => setIsOpen(!isOpen)}
+          className="fixed bottom-8 right-8 w-16 h-16 bg-blue-600 text-white rounded-2xl shadow-2xl flex items-center justify-center hover:bg-blue-700 transition-all hover:scale-105 active:scale-95 z-[200] group"
+        >
+          {isOpen ? (
+            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+          ) : (
+            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+          )}
+        </button>
+      )}
 
       {/* Chat Window */}
       <div className={`

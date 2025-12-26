@@ -222,6 +222,7 @@ const App: React.FC = () => {
         onAddTask={(t) => setTasks(prev => [...prev, t])}
         onUpdateTask={handleUpdateTask}
         onDeleteTask={(id) => finalDeleteTask(id)}
+        showButton={false}
       />
 
       {isModalOpen && (
